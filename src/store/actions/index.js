@@ -19,3 +19,9 @@ export {
     fetchCommentsSuccess,
     fetchCommentsStart
 } from './comments'
+export {
+    auth,
+    logout,
+    setAuthRedirectPath,
+    authCheckState
+} from './auth'

@@ -15,9 +15,9 @@ class Show extends Component {
         let showText = 'Not loaded yet'
 
         let commentList = 'no comments added yet'
-        
+
         if (!this.props.loading && this.props.comments[1] && this.props.comments[1].comments) {
-            let commentList = 
+            commentList = 
                 <CommentList 
                     recipeId={this.props.match.params.id}
                     comments={this.props.comments[1].comments}

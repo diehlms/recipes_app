@@ -9,13 +9,15 @@ import {BrowserRouter} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import recipeReducer from './store/reducers/recipes'
 import commentReducer from './store/reducers/comments'
+import authReducer from './store/reducers/auth'
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
     recipes: recipeReducer,
-    comments: commentReducer
+    comments: commentReducer,
+    auth: authReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
