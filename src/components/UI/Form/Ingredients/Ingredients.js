@@ -8,6 +8,7 @@ export class Ingredients extends Component {
                     <input 
                         type="text"
                         name="ingredient"
+                        placeholder="ingredient"
                         value={ing}
                         onChange={(e) => this.props.onIngChange(e, index)}
                     />

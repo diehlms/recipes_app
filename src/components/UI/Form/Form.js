@@ -8,7 +8,9 @@ export class Form extends Component {
     state = {
         name: '',
         directions: '',
-        ingredients: ['']
+        ingredients: [''],
+        image: null,
+        loading: false
     }
 
     onChange = (e) => {
@@ -17,11 +19,13 @@ export class Form extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.onAddRecipe(this.state.name, this.state.directions, this.state.ingredients)
+        this.props.onAddRecipe(this.state.name, this.state.directions, this.state.ingredients, this.state.image)
         this.setState({
             name: '',
             directions: '',
-            ingredients: [""]
+            ingredients: [""],
+            image: null,
+            loading: false
         })
     }
 
@@ -29,6 +33,15 @@ export class Form extends Component {
         this.state.ingredients[index] = e.target.value
         this.setState({
             ingredients: this.state.ingredients
+        })
+    }
+
+    onImageChange = e => {
+        const files = Array.from(e.target.files)
+        this.setState({ loading: true })
+        const formData = new FormData()
+        files.forEach((file, i) => {
+            formData.append(i, file)
         })
     }
 
@@ -40,6 +53,7 @@ export class Form extends Component {
     render() {
         return (
             <div className="Form">
+                <h5>Add a recipe:</h5>
                 <form onSubmit={this.onSubmit}>
                     <div>
                         <label>Name of Recipe:</label>
@@ -47,10 +61,12 @@ export class Form extends Component {
                         <input 
                             type="text"
                             name="name"
+                            placeholder="title of recipe"
                             value={this.state.name}
                             onChange={this.onChange}/>
                     </div>
                     <div>
+                        <label>Ingredients:</label>
                         <Ingredients 
                             ingredients={this.state.ingredients}
                             onIngChange={(e, index) => this.onIngChange(e, index)}
@@ -64,8 +80,19 @@ export class Form extends Component {
                             rows="5"
                             type="text"
                             name="directions"
+                            placeholder="directions"
                             value={this.state.directions}
                             onChange={this.onChange} />
+                    </div>
+                    <div>
+                        <label>Directions:</label>
+                        <br/>
+                        <input
+                            type="file"
+                            name="image"
+                            placeholder="add an image"
+                            value={this.state.image}
+                            onChange={e => this.onImageChange(e)} />
                     </div>
                     <input type="submit" value="Submit" />
                 </form>
@@ -81,7 +108,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddRecipe: (name, directions, ingredients) => dispatch(actions.addRecipe(name, directions, ingredients))
+        onAddRecipe: (name, directions, ingredients, image) => dispatch(actions.addRecipe(name, directions, ingredients, image))
     }
 }
 

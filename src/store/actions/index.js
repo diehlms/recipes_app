@@ -10,3 +10,12 @@ export {
     addStar,
     removeStar
 } from './recipes'
+export {
+    addComment,
+    addCommentSuccess,
+    addCommentInit,
+    removeComment,
+    fetchComments,
+    fetchCommentsSuccess,
+    fetchCommentsStart
+} from './comments'

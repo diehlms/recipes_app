@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import * as actions from '../../../store/actions/index'
 import { throwStatement } from '@babel/types';
+import './Recipe.css'
 
 export class Recipe extends Component {
     
@@ -23,19 +24,25 @@ export class Recipe extends Component {
         }
 
         return (
-            <div>
-                <h1><Link 
-                    to={`/recipes/${id}`}>
-                    {name}
-                </Link></h1>
-                <p>{directions}</p>
-                <div>
-                    <button onClick={() => addStar(id)}>-</button>
-                    <p>{stars}</p>
-                    <button onClick={() => removeStar(id)}>+</button>
+            <div className="indRecipe">
+                <div className="infoCard1">
+                    <p><Link 
+                        to={`/recipes/${id}`}>
+                        {name}
+                    </Link></p>
+                    <div className="stars">
+                        <span>
+                            <button onClick={() => addStar(id)}>add star</button>
+                            {stars}
+                            <button onClick={() => removeStar(id)}>remove star</button>
+                        </span>
+                    </div>
+                    <ul>{ingList}</ul>
+                    <button onClick={this.props.delRecipe.bind(this,id)}>delete recipe</button>
                 </div>
-                <ul>{ingList}</ul>
-                <button onClick={this.props.delRecipe.bind(this,id)}>X</button>
+                <div className="directions">
+                    {directions}
+                </div>
             </div>
         )
     }

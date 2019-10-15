@@ -8,12 +8,14 @@ import thunk from 'redux-thunk'
 import {BrowserRouter} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import recipeReducer from './store/reducers/recipes'
+import commentReducer from './store/reducers/comments'
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
-    recipes: recipeReducer
+    recipes: recipeReducer,
+    comments: commentReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
