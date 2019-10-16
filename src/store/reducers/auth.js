@@ -19,6 +19,7 @@ const authReducer = (state = initialState, action) => {
             ]
         }
         case actions.AUTH_FAIL: {
+            console.log(action.err)
             return [
                 state, {
                     error: action.err,

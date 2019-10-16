@@ -1,4 +1,5 @@
 import * as actions from './actionTypes'
+import axios from 'axios'
 
 export const authStart = () => {
     return {
@@ -46,12 +47,12 @@ export const auth = (email, password, isSignup) => {
             password,
             returnSecureToken: true
         }
-        let url = process.env.SIGNUP_LINK
+        let url = process.env.REACT_APP_AUTH_SIGN_UP_URL
         if (!isSignup) {
-            url = process.env.LOGIN_LINK
+            url = process.env.REACT_APP_AUTH_SIGN_IN_URL
         }
-        fetch(url, authData)
-            .then(res => {
+        axios.post(url, authData)
+            .then(res=> {
                 const expirationDate = new Date(new Date().getTime() + res.data.expiresIn * 1000)
                 localStorage.setItem('token', res.data.idToken)
                 localStorage.setItem('expirationDate', expirationDate)
@@ -60,7 +61,7 @@ export const auth = (email, password, isSignup) => {
                 dispatch(checkAuthTimeout(res.data.expiresIn))
             })
             .catch(err => {
-                dispatch(authFail(err.response.data.error))
+                dispatch(authFail(err))
             })
     }
 }
