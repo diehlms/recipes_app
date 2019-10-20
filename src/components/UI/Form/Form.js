@@ -3,6 +3,7 @@ import Ingredients from './Ingredients/Ingredients'
 import './Form.css'
 import { connect } from 'react-redux' 
 import * as actions from '../../../store/actions/index'
+import Modal from 'react-modal'
 
 export class Form extends Component {
     state = {
@@ -10,7 +11,8 @@ export class Form extends Component {
         directions: '',
         ingredients: [''],
         image: null,
-        loading: false
+        loading: false,
+        modalIsOpen: false
     }
 
     onChange = (e) => {
@@ -49,53 +51,71 @@ export class Form extends Component {
         e.preventDefault();
         this.setState({ingredients: [...this.state.ingredients, ""]})
     }
+
+    removeIngredient = index => {
+        this.setState({
+            ingredients: [...this.state.ingredients, this.state.ingredients.splice(index, 1)]
+        })
+    }
+
+    openModal() {
+        this.setState({modalIsOpen: true})
+    }
+
+    closeModal() {
+        this.setState({modalIsOpen: false})
+    }
     
     render() {
         return (
-            <div className="Form">
-                <h5>Add a recipe:</h5>
-                <form onSubmit={this.onSubmit}>
-                    <div>
-                        <label>Name of Recipe:</label>
-                        <br/>
-                        <input 
-                            type="text"
-                            name="name"
-                            placeholder="title of recipe"
-                            value={this.state.name}
-                            onChange={this.onChange}/>
-                    </div>
-                    <div>
-                        <label>Ingredients:</label>
-                        <Ingredients 
-                            ingredients={this.state.ingredients}
-                            onIngChange={(e, index) => this.onIngChange(e, index)}
-                            addIngredient={this.addIngredient}
-                        />
-                    </div>
-                    <div>
-                        <label>Directions:</label>
-                        <br/>
-                        <textarea
-                            rows="5"
-                            type="text"
-                            name="directions"
-                            placeholder="directions"
-                            value={this.state.directions}
-                            onChange={this.onChange} />
-                    </div>
-                    <div>
-                        <label>Directions:</label>
-                        <br/>
-                        <input
-                            type="file"
-                            name="image"
-                            placeholder="add an image"
-                            value={this.state.image}
-                            onChange={e => this.onImageChange(e)} />
-                    </div>
-                    <input type="submit" value="Submit" />
-                </form>
+            <div>
+                <button 
+                        onClick={() => this.openModal()}
+                        className="addrecipebutton"
+                        >add a recipe
+                </button>
+                <div className="recipeform">
+                    <Modal
+                        isOpen={this.state.modalIsOpen}
+                        onRequestClose={() => this.closeModal()}
+                        ariaHideApp={false}
+                    >
+                        <h5>Add a recipe:</h5>
+                        <form onSubmit={this.onSubmit}>
+                            <label>Name of Recipe:</label>
+                            <input 
+                                type="text"
+                                name="name"
+                                placeholder="title of recipe"
+                                value={this.state.name}
+                                onChange={this.onChange}/>
+
+                            <label>Ingredients:</label>
+                            <Ingredients 
+                                ingredients={this.state.ingredients}
+                                onIngChange={(e, index) => this.onIngChange(e, index)}
+                                removeIngredient={(index) => this.removeIngredient(index)}
+                                addIngredient={this.addIngredient}
+                            />
+                            <label>Directions:</label>
+                            <textarea
+                                rows="5"
+                                type="text"
+                                name="directions"
+                                placeholder="directions"
+                                value={this.state.directions}
+                                onChange={this.onChange} />
+                            <label>Image:</label>
+                            <input
+                                type="file"
+                                name="image"
+                                placeholder="add an image"
+                                value={this.state.image}
+                                onChange={e => this.onImageChange(e)} />
+                            <input type="submit" value="Submit" />
+                        </form>
+                    </Modal>
+                </div>
             </div>
         )
     }

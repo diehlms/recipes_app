@@ -13,6 +13,9 @@ export class Ingredients extends Component {
                         onChange={(e) => this.props.onIngChange(e, index)}
                     />
                     <button
+                        onClick={(index) => this.props.removeIngredient(index)}
+                    >-</button>
+                    <button
                         onClick={this.props.addIngredient}
                     >+</button>
                 </div>

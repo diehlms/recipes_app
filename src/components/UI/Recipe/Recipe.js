@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import * as actions from '../../../store/actions/index'
 import { throwStatement } from '@babel/types';
+import firebase from '../../../firebase'
 import './Recipe.css'
 
 export class Recipe extends Component {
@@ -16,33 +17,56 @@ export class Recipe extends Component {
         })
 
         const addStar = id => {
-            this.props.onAddStar(id)
+            const increment = firebase.firestore.FieldValue.increment(1)
+            var db = firebase.firestore()
+            var dbRefInd = db.collection('recipes').doc(id)
+            dbRefInd.update({stars: increment})
         }
 
         const removeStar = id => {
-            this.props.onRemoveStar(id)
+            const decrement = firebase.firestore.FieldValue.increment(-1)
+            var db = firebase.firestore()
+            var dbRefInd = db.collection('recipes').doc(id)
+            dbRefInd.update({stars: decrement})
         }
 
         return (
             <div className="indRecipe">
-                <div className="infoCard1">
-                    <p><Link 
-                        to={`/recipes/${id}`}>
-                        {name}
-                    </Link></p>
-                    <div className="stars">
-                        <span>
-                            <button onClick={() => addStar(id)}>add star</button>
+                <p>
+                    <Link to={`/recipes/${id}`}>{name}</Link>
+                </p>
+                <div className="stars">
+                    <span>
+                        <button onClick={() => addStar(id)}>add star</button>
                             {stars}
-                            <button onClick={() => removeStar(id)}>remove star</button>
-                        </span>
+                        <button onClick={() => removeStar(id)}>remove star</button>
+                    </span>
+                </div>
+                <div className="infoCard1">
+                    <div>
+                        <p>Ingredients:</p>
+                        <ul>{ingList}</ul>
                     </div>
-                    <ul>{ingList}</ul>
-                    <button onClick={this.props.delRecipe.bind(this,id)}>delete recipe</button>
+                    <div className="directions">
+                        <p>Directions:</p>
+                        <p>{directions}</p>
+                    </div>
                 </div>
-                <div className="directions">
-                    {directions}
-                </div>
+                <button 
+                    style={{
+                        width: '90%',
+                        backgroundColor: 'salmon',
+                        color: 'white',
+                        padding: '6px',
+                        marginBottom: '5px',
+                        bottom: '0',
+                        border: 'none',
+                        cursor: 'pointer'
+                    
+                    }}
+                    onClick={id => this.props.delRecipe(id)}>
+                    delete recipe
+                </button>
             </div>
         )
     }

@@ -47,7 +47,7 @@ export const fetchComments = () => {
                     comment: comments[comment].comment
                 })
             }
-            dispatch(fetchCommentsSuccess([commentsArr]))
+            dispatch(fetchCommentsSuccess(commentsArr))
         })
     }
 }
@@ -61,6 +61,6 @@ export const fetchCommentsSuccess = commentsArr => {
 
 export const fetchCommentsStart = () => {
     return {
-        type: actions.FETCH_RECIPES_START
+        type: actions.FETCH_COMMENTS_START
     }
 }

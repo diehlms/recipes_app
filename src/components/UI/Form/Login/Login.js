@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import * as actions from '../../../../store/actions/index'
+import './Login.css'
 
 export class Login extends Component {
     state = {
-        username: '',
+        email: '',
         password: '',
         isSignup: true
     }
@@ -42,41 +43,44 @@ export class Login extends Component {
             form = 'loading'
         } else {
             form = (
-                <form onSubmit={this.submitHandler}>
+                <div className="authform">
+                    <form onSubmit={this.submitHandler}>
+                        <div>
+                            <p>Email:</p>
+                            <input 
+                                type="email"
+                                name="email"
+                                value={this.state.email}
+                                onChange={this.changeHandler}
+                                placeholder="email"/>
+                        </div>
+                        <div>
+                            <p>Password:</p>
+                            <input
+                                type="password"
+                                name="password"
+                                value={this.state.password}
+                                onChange={this.changeHandler}
+                                placeholder="password"
+                            />
+                        </div>
+                        <div>
+                            <input type="submit"></input>
+                        </div>
+                    </form>
                     <div>
-                        <p>Email:</p>
-                        <input 
-                            type="email"
-                            name="email"
-                            value={this.state.email}
-                            onChange={this.changeHandler}
-                            placeholder="email"/>
-                    </div>
-                    <div>
-                        <p>Password:</p>
-                        <input
-                            type="password"
-                            name="password"
-                            value={this.state.password}
-                            onChange={this.changeHandler}
-                            placeholder="password"
-                        />
-                    </div>
-                    <div>
-                        <input type="submit"></input>
-                    </div>
-                    <div>
-                        <button clicked={this.switchAuthModeHandler}>
+                        <button onClick={this.switchAuthModeHandler}>
                             switch to {this.state.isSignup ? 'sign in' : 'sign up'}
                         </button>
                     </div>
-                </form>
+                </div>
             )
         }
 
         if (this.props.error) {
+            console.log(this.props.error)
             errorMessage = (
-                <p>{this.props.error.message}</p>
+                <p>{this.props.error}</p>
             )
         }
 
@@ -99,7 +103,7 @@ const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
         error: state.auth.error,
-        isAuthenticated: state.auth.token !== null,
+        isAuthenticated: state.auth.token !== null && state.auth.token !== undefined,
         authRedirectPath: state.auth.authRedirectPath
     }
 }

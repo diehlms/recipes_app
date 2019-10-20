@@ -1,12 +1,43 @@
-.Form {
-    padding: 10px;
-    width: 80%;
-    margin: 0 auto;
-    border: 1px solid red;
-    margin-top: 5px;
+.recipeform {
+    width: 50%;
+    margin-left: 20px;
 }
 
-input, textarea {
-    width: 80%;
-    border: 1px solid grey;
+input[type=text], textarea, input[type=submit], input[type=email], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
 }
+
+input[type=submit] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+textarea {
+    resize: none;
+}
+
+label {
+    float: left;
+}
+
+.addrecipebutton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+
+

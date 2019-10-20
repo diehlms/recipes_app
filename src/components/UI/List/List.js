@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Recipe from '../Recipe/Recipe'
 import { connect } from 'react-redux'
 import * as actions from '../../../store/actions/index'
+import './List.css'
 
 export class List extends Component {
     

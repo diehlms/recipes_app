@@ -3,3 +3,17 @@
     background-color: black;
     padding: 4px;
 }
+
+.Header>h3>a {
+    text-decoration: none;
+    color: white
+}
+
+.Header>ul>a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    text-align: left;
+    padding-left: 20px;
+    font-size: 20px;
+}

@@ -1,14 +1,24 @@
-.indRecipe {
+.infoCard1 {
     font-size: 12px;
-    border: 1px solid red;
     margin: 10px;
     display: grid;
     grid-template-columns: 50% 50%;
     padding: 15px;
+    box-sizing: border-box;
+    min-height: 180px;
 }
 
-.indRecipe>ul {
+.indRecipe {
+    border: 1px dashed #ccc;
+}
+
+.infoCard1>div>p, .infoCard1>div>ul {
     text-align: left;
+}
+
+.indRecipe>p>a{
+    text-decoration: none;
+    color: black;
 }
 
 .stars>span {

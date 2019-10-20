@@ -3,27 +3,16 @@ import { connect } from 'react-redux';
 import * as actions from '../../../../store/actions/index'
 import CommentForm from '../../Form/Comment/Comment'
 import CommentList from '../../List/CommentList'
+import './Show.css'
 
 class Show extends Component {
     componentDidMount() {
         this.props.onFetchRecipes()
-        this.props.onFetchComments()
     }
 
     render() {
     
         let showText = 'Not loaded yet'
-
-        let commentList = 'no comments added yet'
-
-        if (!this.props.loading && this.props.comments[1] && this.props.comments[1].comments) {
-            commentList = 
-                <CommentList 
-                    recipeId={this.props.match.params.id}
-                    comments={this.props.comments[1].comments}
-                    loading={this.props.loading}
-                />
-        }
 
         if (!this.props.loading && this.props.recipes[1] && this.props.recipes[1].recipes) {
             const {name, directions, ingredient, stars } = this.props.recipes[1].recipes[0].find(recipe => 
@@ -36,18 +25,28 @@ class Show extends Component {
             })
 
             return showText = (
-                <div>
+                <div className="recipeShow">
                     <div>
-                        {name}
-                        {directions}
-                        {ingList}
-                        {stars}
+                        <h4>{name}</h4>
+                        <button>-</button>
+                            {stars}
+                        <button>+</button>
+                        <p>Directions:</p>
+                        <p>{directions}</p>
+                        <p>Ingredients:</p>
+                        <ul>
+                            {ingList}
+                        </ul>
                     </div>
-                    {commentList}
+                    <div>
+                    <CommentList 
+                        recipeId={this.props.match.params.id}
+                    />
                     <p>Add comment:</p>
                     <CommentForm 
                         recipeId={this.props.match.params.id}
-                        addComment={(comment, id) => this.props.onAddComment(comment, id)}/>
+                        addComment={(comment, id) => this.props.onAddComment(comment, id)}/> 
+                    </div>
                 </div>
             )
         }
@@ -71,8 +70,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onFetchRecipes: () => dispatch(actions.fetchRecipes()),
-        onAddComment: (comment, id) => dispatch(actions.addComment(comment, id)),
-        onFetchComments: () => dispatch(actions.fetchComments())
+        onAddComment: (comment, id) => dispatch(actions.addComment(comment, id))
     }
 }
 

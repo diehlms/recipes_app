@@ -1,0 +1,9 @@
+.recipeShow {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    text-align: left;
+}
+
+.recipeShow>div{
+    padding: 15px;
+}

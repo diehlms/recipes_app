@@ -1,27 +1,55 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import * as actions from '../../../store/actions/index'
 
-export default function CommentList(props) {
-    let comments = 'no comments added yet'
-    let commentList = []
+class CommentList extends Component {
+    componentDidMount() {
+        this.props.onFetchComments()
+    }
+    
+    render() {
+        let comments = 'no comments added yet'
+        let commentList = []
 
-    props.comments[0].map(indComment => {
-        if (indComment.recipeId == props.recipeId) {
-            commentList.push(indComment.comment)
+        if (!this.props.loading && this.props.comments[1] && this.props.comments[1].comments) {
+            this.props.comments[1].comments.map(indComment => {
+                if (indComment.recipeId == this.props.recipeId) {
+                    commentList.push(indComment.comment)
+                }
+            })
+
         }
-    })
 
-    comments = commentList.map(indComment => {
+        if (commentList.length > 0) {
+            comments = commentList.map(indComment => {
+                return (
+                    <li>{indComment}</li>
+                )
+            })
+        }
+
         return (
-            <li>{indComment}</li>
+            <div>
+                <p>Comments:</p>
+                <ul>
+                    {comments}
+                </ul>
+            </div>
         )
-    })
-
-    return (
-        <div>
-            <p>Comments:</p>
-            <ul>
-                {comments}
-            </ul>
-        </div>
-    )
+    }
 }
+
+const mapStateToProps = state => {
+    return {
+        loading: state.comments.loading,
+        comments: state.comments
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchComments: () => dispatch(actions.fetchComments())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentList)

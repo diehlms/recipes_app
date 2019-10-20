@@ -18,7 +18,9 @@ export class Well extends Component {
         return (
             <div className="Well">
                 <Form />
-                <h1>{recipes}</h1>
+                <div className="recipes">
+                    {recipes}
+                </div>
             </div>
         )
     }
