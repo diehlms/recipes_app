@@ -20,8 +20,14 @@ export {
     fetchCommentsStart
 } from './comments'
 export {
-    auth,
+    login,
     logout,
-    setAuthRedirectPath,
-    authCheckState
+    loginInit,
+    loginSuccess,
+    loginFail,
+    checkAuthState,
+    checkAuthLoading,
+    checkAuthSuccess,
+    logoutInit,
+    logoutSuccess
 } from './auth'

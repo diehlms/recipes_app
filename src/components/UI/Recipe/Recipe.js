@@ -7,14 +7,30 @@ import firebase from '../../../firebase'
 import './Recipe.css'
 
 export class Recipe extends Component {
-    
     render() {
-        const { id, name, directions, ingredient, stars } = this.props.recipe;
+        const { id, name, directions, ingredient, stars, image } = this.props.recipe;
+        
         const ingList = ingredient.map((ing) => {
             return (
                 <li>{ing}</li>
             )
         })
+
+        let img = '';
+
+        if ({image}) {
+            img = (
+                <img id={`${image}-img`} alt=''/>
+            )
+            let storage = firebase.storage();
+            let storageRef = storage.refFromURL(`${image}`)
+            storageRef.getDownloadURL().then(function(url) {
+                var imgInject = document.getElementById(`${image}-img`);
+                imgInject.src = url
+            })
+            
+        }
+
 
         const addStar = id => {
             const increment = firebase.firestore.FieldValue.increment(1)
@@ -42,6 +58,9 @@ export class Recipe extends Component {
                         <button onClick={() => removeStar(id)}>remove star</button>
                     </span>
                 </div>
+                <div>
+                    {img !== '' ? img : null}
+                </div>
                 <div className="infoCard1">
                     <div>
                         <p>Ingredients:</p>
@@ -64,7 +83,7 @@ export class Recipe extends Component {
                         cursor: 'pointer'
                     
                     }}
-                    onClick={id => this.props.delRecipe(id)}>
+                    onClick={this.props.delRecipe.bind(this,id)}>
                     delete recipe
                 </button>
             </div>
@@ -78,4 +97,5 @@ const mapDispatchToProps = dispatch => {
         onRemoveStar: id => dispatch(actions.removeStar(id))
     }
 }
+
 export default connect(null, mapDispatchToProps)(Recipe)

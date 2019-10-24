@@ -1,92 +1,82 @@
 import * as actions from './actionTypes'
-import axios from 'axios'
+import firebase, { authRef, provider } from '../../firebase'
+import { auth } from 'firebase';
 
-export const authStart = () => {
+export const loginInit = () => {
     return {
-        type: actions.AUTH_START
+        type: actions.LOGIN_INIT
     }
 }
 
-export const authSuccess = (token, userId) => {
-    return {
-        type: actions.AUTH_SUCCESS,
-        idToken: token,
-        userId: userId
+export const login = () => {
+    return dispatch => {
+        dispatch(loginInit())
+        authRef.signInWithPopup(provider)
+            .then((result) => {
+                const user = result.user;
+                dispatch(loginSuccess(user))
+            })
+            .catch((err) => {
+                dispatch(loginFail(err))
+            })
     }
 }
 
-export const authFail = err => {
+export const loginSuccess = user => {
     return {
-        type: actions.AUTH_FAIL,
+        type: actions.LOGIN_SUCCESS,
+        user
+    }
+}
+
+export const loginFail = err => {
+    return {
+        type: actions.LOGIN_FAIL,
         err
     }
 }
 
+export const logoutInit = () => {
+    return {
+        type: actions.LOGOUT_INIT
+    }
+}
+
 export const logout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('expirationDate')
-    localStorage.removeItem('userId')
+    return dispatch => {
+        dispatch(logoutInit())
+        authRef.signout()
+        .then(() => {
+            dispatch(logoutSuccess())
+        })
+    }
+}
+
+export const logoutSuccess = () => {
     return {
-        type: actions.AUTH_LOGOUT
+        type: actions.LOGIN_SUCCESS
     }
 }
 
-export const checkAuthTimeout = expirationTime => {
-    return dispatch => {
-        setTimeout(() => {
-            dispatch(logout())
-        }, expirationTime * 1000)
-    }
-}
-
-export const auth = (email, password, isSignup) => {
-    return dispatch => {
-        dispatch(authStart())
-        const authData = {
-            email,
-            password,
-            returnSecureToken: true
-        }
-        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + process.env.REACT_APP_API_KEY 
-        if (!isSignup) {
-            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + process.env.REACT_APP_API_KEY
-        }
-        axios.post(url, authData)
-            .then(res=> {
-                const expirationDate = new Date(new Date().getTime() + res.data.expiresIn * 1000)
-                localStorage.setItem('token', res.data.idToken)
-                localStorage.setItem('expirationDate', expirationDate)
-                localStorage.setItem('userId', res.data.localId)
-                dispatch(authSuccess(res.data.idToken, res.data.userId))
-                dispatch(checkAuthTimeout(res.data.expiresIn))
-            })
-            .catch(err => {
-                dispatch(authFail(err))
-            })
-    }
-}
-
-export const setAuthRedirectPath = path => {
+export const checkAuthLoading = () => {
     return {
-        type: actions.SET_AUTH_REDIRECT,
-        path
+        type: actions.CHECK_AUTH_LOADING
     }
 }
 
-export const authCheckState = () => {
+export const checkAuthSuccess = user => {
+    return {
+        type: actions.CHECK_AUTH_SUCCESS,
+        user
+    }
+}
+export const checkAuthState = () => {
     return dispatch => {
-        const token = localStorage.getItem('token')
-        if (!token) {
-            dispatch(logout())
-        } else {
-            const expirationDate = new Date(localStorage.getItem('expirationDate'))
-            if (expirationDate <= new Date()) {
-                dispatch(logout())
-            } else {
-                const userId = localStorage.getItem('userId')
-                dispatch(authSuccess(token, userId))
-                dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000 ))
+        dispatch(checkAuthLoading())
+        authRef.onAuthStateChanged((user) => {
+            if (user) {
+                dispatch(checkAuthSuccess(user))
             }
-        }
+        });
     }
 }

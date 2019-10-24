@@ -3,6 +3,7 @@ import Ingredients from './Ingredients/Ingredients'
 import './Form.css'
 import { connect } from 'react-redux' 
 import * as actions from '../../../store/actions/index'
+import firebase from '../../../firebase'
 import Modal from 'react-modal'
 
 export class Form extends Component {
@@ -10,6 +11,7 @@ export class Form extends Component {
         name: '',
         directions: '',
         ingredients: [''],
+        imageDownloadUrl: '',
         image: null,
         loading: false,
         modalIsOpen: false
@@ -19,16 +21,56 @@ export class Form extends Component {
         this.setState({[e.target.name]: e.target.value })
     }
 
+    imageSubmitHandler = () => {
+        let storageRef = firebase.storage().ref('recipes');
+        if (this.state.image) {
+            let uploadTask = storageRef.put(this.state.image);
+            uploadTask.on('state_changed', snapshot => {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done')
+                switch (snapshot.state) {
+                    case firebase.storage.TaskState.PAUSED:
+                        console.log('Upload paused')
+                        break;
+                    case firebase.storage.TaskState.RUNNING:
+                        console.log('Upload running')
+                        break;
+                    }
+                }, function(error) {
+                    console.log(error)
+                }, () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        console.log(downloadURL)
+                        this.setState({
+                            imageDownloadUrl: downloadURL
+                        })
+                        this.props.onAddRecipe(this.state.name, this.state.directions, this.state.ingredients, this.state.imageDownloadUrl)
+                        this.setState({
+                            name: '',
+                            ingredients: [''],
+                            image: null,
+                            imageDownloadUrl: '',
+                            directions: ''
+                        })
+                    })
+                })
+            }
+    }
+
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.onAddRecipe(this.state.name, this.state.directions, this.state.ingredients, this.state.image)
-        this.setState({
-            name: '',
-            directions: '',
-            ingredients: [""],
-            image: null,
-            loading: false
-        })
+        if (this.state.image !== null) {
+            this.imageSubmitHandler()
+        } else {
+            this.props.onAddRecipe(this.state.name, this.state.directions, this.state.ingredients )
+            this.setState({
+                name: '',
+                ingredients: [''],
+                image: null,
+                imageDownloadUrl: '',
+                directions: ''
+            })
+        }
     }
 
     onIngChange = (e, index) => {
@@ -39,12 +81,10 @@ export class Form extends Component {
     }
 
     onImageChange = e => {
-        const files = Array.from(e.target.files)
-        this.setState({ loading: true })
-        const formData = new FormData()
-        files.forEach((file, i) => {
-            formData.append(i, file)
-        })
+        if (e.target.files[0]) {
+            const image = e.target.files[0]
+            this.setState({image: image})
+        }
     }
 
     addIngredient = (e) => {
@@ -53,9 +93,7 @@ export class Form extends Component {
     }
 
     removeIngredient = index => {
-        this.setState({
-            ingredients: [...this.state.ingredients, this.state.ingredients.splice(index, 1)]
-        })
+        this.state.ingredients.splice(index, 1)
     }
 
     openModal() {
@@ -67,6 +105,7 @@ export class Form extends Component {
     }
     
     render() {
+
         return (
             <div>
                 <button 
@@ -108,10 +147,7 @@ export class Form extends Component {
                             <label>Image:</label>
                             <input
                                 type="file"
-                                name="image"
-                                placeholder="add an image"
-                                value={this.state.image}
-                                onChange={e => this.onImageChange(e)} />
+                                onChange={this.onImageChange} />
                             <input type="submit" value="Submit" />
                         </form>
                     </Modal>
@@ -121,16 +157,12 @@ export class Form extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-    }
-}
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddRecipe: (name, directions, ingredients, image) => dispatch(actions.addRecipe(name, directions, ingredients, image))
+        onAddRecipe: (name, directions, ingredients, imageDownloadUrl) => dispatch(actions.addRecipe(name, directions, ingredients, imageDownloadUrl))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form)
+export default connect(null, mapDispatchToProps)(Form)
 

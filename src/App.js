@@ -5,38 +5,33 @@ import './App.css';
 import { Switch, Route } from 'react-router-dom'
 import Well from './containers/Well/Well'
 import Show from './components/UI/Pages/Show/Show'
-import Login from './components/UI/Pages/Login/Login'
-import Logout from './components/UI/Form/Login/Logout'
+import GoogleLogin from './components/UI/Form/Login/GoogleLogin'
 import * as actions from './store/actions/index'
+import Public from './components/UI/Pages/Public/Public'
 
 class App extends Component {
   componentDidMount() {
-    this.props.onTryAutoSignup()
+    this.props.onCheckAuthState()
   }
-  
   render() {
+    let routes = ''
 
-    let routes = '';
-
-    if (!this.props.isAuth) {
+    if (this.props.auth[1] && this.props.auth[1].user && this.props.auth[1].user !== null) {
       routes = (
         <Switch>
-          <Route path='/login' component={Login} />
           <Route exact path="/" component={Well} />
+          <Route path='/logout' component={GoogleLogin} />
           <Route path='/recipes/:id' component={Show} />
         </Switch>
       )
     } else {
       routes = (
         <Switch>
-          <Route exact path="/" component={Well} />
-          <Route path='/login' component={Login} />
-          <Route path='/logout' component={Logout} />
-          <Route path='/recipes/:id' component={Show} />
+          <Route path='/login' component={GoogleLogin} />
+          <Route path='/public' component={Public} />
         </Switch>
       )
     }
-    
     return (
       <div className="App">
         <Header />
@@ -48,14 +43,14 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.auth.userId !== null,
-    userId: state.auth.userId
+    auth: state.auth
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTryAutoSignup: () => dispatch(actions.authCheckState())
+    onCheckAuthState: () => dispatch(actions.checkAuthState())
   }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(App);

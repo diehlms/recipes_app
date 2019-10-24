@@ -22,15 +22,15 @@ export const addRecipeFail = () => {
     }
 }
 
-export const addRecipe = (name, directions, ingredients, image) => {
+export const addRecipe = (name, directions, ingredients, imageDownloadUrl) => {
     return dispatch => {
         dispatch(addRecipeInit())
         const newRecipe = {
             name,
             directions,
             ingredients,
-            image,
-            stars: 1
+            stars: 1,
+            imageDownloadUrl
         }
         dbRef.push(newRecipe)
         dispatch(addRecipeSuccess(newRecipe))
@@ -77,7 +77,7 @@ export const fetchRecipes = () => {
                     name: recipes[recipe].name,
                     directions: recipes[recipe].name,
                     ingredient: recipes[recipe].ingredients,
-                    image: recipes[recipe].image,
+                    image: recipes[recipe].imageDownloadUrl,
                     stars: recipes[recipe].stars
                 })
             }

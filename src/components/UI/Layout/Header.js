@@ -7,15 +7,13 @@ import { connect } from 'react-redux'
 class Header extends Component {
     
     componentDidMount() {
-        this.props.onCheckAuthState()
+        
     }
 
     render() {
         let authLink = ''
 
-        let authToken = localStorage.getItem('userId')
-
-        if (!authToken) {
+        if (!this.props.auth[1]) {
             authLink = (
                 <Link to='login'>Login</Link>
             )
@@ -36,9 +34,15 @@ class Header extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
     return {
-        onCheckAuthState: () => dispatch(actions.authCheckState())
+        auth: state.auth
     }
 }
-export default connect(null, mapDispatchToProps)(Header)
+
+const mapDispatchToProps = dispatch => {
+    return {
+
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

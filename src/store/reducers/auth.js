@@ -1,53 +1,55 @@
 import * as actions from '../actions/actionTypes'
+import { authRef } from '../../firebase'
 
 const initialState = {
-    token: null,
-    userId: null,
-    error: null,
+    user: null,
     loading: false,
-    authRedirectPath: '/'
 }
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case actions.AUTH_START: {
+        case actions.LOGIN_INIT: {
             return [
                 state, {
-                    error: null,
                     loading: true
                 }
             ]
         }
-        case actions.AUTH_FAIL: {
+        case actions.LOGIN_SUCCESS: {
             return [
                 state, {
-                    error: action.err,
+                    user: action.user,
                     loading: false
                 }
             ]
         }
-        case actions.AUTH_SUCCESS: {
+        case actions.LOGOUT_INIT: {
             return [
                 state, {
-                    token: action.idToken,
-                    userId: action.userId,
-                    error: null,
+                    loading: true
+                }
+            ]
+        }
+        case actions.LOGOUT_SUCCESS: {
+            return [
+                state, {
+                    user: null,
+                    loading: false,
+                }
+            ]
+        }
+        case actions.CHECK_AUTH_LOADING: {
+            return [
+                state, {
+                    loading: true
+                }
+            ]
+        }
+        case actions.CHECK_AUTH_SUCCESS: {
+            return [
+                state, {
+                    user: action.user,
                     loading: false
-                }
-            ]
-        }
-        case actions.SET_AUTH_REDIRECT: {
-            return [
-                state, {
-                    authRedirectPath: action.path
-                }
-            ]
-        }
-        case actions.AUTH_LOGOUT: {
-            return [
-                state, {
-                    token: null,
-                    userId: null
                 }
             ]
         }
