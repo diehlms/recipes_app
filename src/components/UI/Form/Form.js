@@ -62,7 +62,7 @@ export class Form extends Component {
         if (this.state.image !== null) {
             this.imageSubmitHandler()
         } else {
-            this.props.onAddRecipe(this.state.name, this.state.directions, this.state.ingredients )
+            this.props.onAddRecipe(this.state.name, this.state.directions, this.state.ingredients, this.state.imageDownloadUrl )
             this.setState({
                 name: '',
                 ingredients: [''],

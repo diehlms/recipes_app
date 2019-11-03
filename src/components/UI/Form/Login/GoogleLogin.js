@@ -1,35 +1,33 @@
-import React, { Component } from 'react'
-import firebase, { authRef, provider } from '../../../../firebase'
-import { auth } from 'firebase';
+import React from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../../store/actions/index'
 
-export class GoogleLogin extends Component {
-    state = {
-        user: null
+function GoogleLogin (props) {
+    const logoutHandler = () => {
+        props.onLogout()
+        props.history.push('/public')
     }
 
-    componentDidMount() {
-        this.props.onCheckAuthState()
+    const loginHandler = () => {
+        props.onLogin()
+        props.history.push('/')
     }
 
-    render() {
-        return (
-            <div>
-                google login
-                {this.props.user ? 
-                    <button onClick={() => this.props.onLogout()}>Logout</button>
-                :
-                    <button onClick={() => this.props.onLogin()}>Log in</button>
-                }
-            </div>
-        )
-    }
+    return (
+        <div>
+            google login
+            {props.user[1] && props.user[1].user ? 
+                <button onClick={logoutHandler}>Logout</button>
+            :
+                <button onClick={loginHandler}>Log in</button>
+            }
+        </div>
+    )
 }
 
 const mapStateToProps = state => {
     return {
-        user: state.auth.user
+        user: state.auth
     }
 }
 
@@ -37,7 +35,6 @@ const mapDispatchToProps = dispatch => {
     return {
         onLogin: () => dispatch(actions.login()),
         onLogout: () => dispatch(actions.logout()),
-        onCheckAuthState: () => dispatch(actions.checkAuthState())
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(GoogleLogin)

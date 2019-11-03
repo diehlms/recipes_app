@@ -11,7 +11,7 @@ export const addComment = (comment, id) => {
             recipeId: id,
         }
         dbRef.push(newComment)
-        dispatch(addCommentSuccess())
+        dispatch(addCommentSuccess(newComment))
     }
 }
 
@@ -21,9 +21,10 @@ export const addCommentInit = () => {
     }
 }
 
-export const addCommentSuccess = () => {
+export const addCommentSuccess = newComment => {
     return {
-        type: actions.ADD_COMMENT_SUCCESS
+        type: actions.ADD_COMMENT_SUCCESS,
+        newComment
     }
 }
 

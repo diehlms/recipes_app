@@ -10,6 +10,9 @@ export class Comment extends Component {
         const submitHandler = e => {
             e.preventDefault();
             this.props.addComment(this.state.comment, this.props.recipeId)
+            this.setState({
+                comment: ''
+            })
         }
 
         const changeHandler = e => {

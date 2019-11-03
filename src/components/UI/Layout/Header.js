@@ -1,33 +1,28 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import './Header.css'
-import * as actions from '../../../store/actions/index'
 import { connect } from 'react-redux'
 
 class Header extends Component {
-    
-    componentDidMount() {
-        
-    }
 
     render() {
         let authLink = ''
-
-        if (!this.props.auth[1]) {
+        if (this.props.user[1] && this.props.user[1].user) {
             authLink = (
-                <Link to='login'>Login</Link>
+                <Link to='logout'>Log Out</Link>
             )
         } else {
             authLink = (
-                <Link to='logout'>Logout</Link>
+                <Link to='login'>Log In</Link>
             )
         }
 
         return (
             <div className="Header">
                 <h3><Link to='/'>Recipes</Link></h3>
-                <ul>
+                <ul className="headerLinks">
                     {authLink}
+                    <Link to='/about'>About</Link>
                 </ul>
             </div>
         )
@@ -36,13 +31,8 @@ class Header extends Component {
 
 const mapStateToProps = state => {
     return {
-        auth: state.auth
+        user: state.auth
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default connect(mapStateToProps, null)(Header)

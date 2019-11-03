@@ -85,23 +85,3 @@ export const fetchRecipes = () => {
         })
     }
 }
-
-export const addStar = id => {
-    const increment = firebase.firestore.FieldValue.increment(1)
-    var db = firebase.firestore()
-    var dbRefInd = db.collection('recipes').doc(id)
-    dbRefInd.update({stars: increment})
-    return {
-        type: actions.ADD_STAR
-    }
-}
-
-export const removeStar = id => {
-    const decrement = firebase.firestore.FieldValue.increment(-1)
-    var db = firebase.firestore()
-    var dbRefInd = db.collection('recipes').doc(id)
-    dbRefInd.update({stars: decrement})
-    return {
-        type: actions.REMOVE_STAR
-    }
-}

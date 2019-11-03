@@ -16,7 +16,7 @@ const commentReducer = (state = initialState, action) => {
         }
         case actions.ADD_COMMENT_SUCCESS: {
             return [
-                state, {
+                ...state, {
                     loading: false
                 }
             ]

@@ -8,7 +8,7 @@ export class List extends Component {
     
     render() {
         return this.props.recipes.map((recipe) => (
-            <div>
+            <div className='recipeGrid'>
                 <Recipe
                     key={recipe.id}
                     recipe={recipe}

@@ -6,9 +6,7 @@ export {
     removeRecipe,
     fetchRecipes,
     fetchRecipesSuccess,
-    fetchRecipesFail,
-    addStar,
-    removeStar
+    fetchRecipesFail
 } from './recipes'
 export {
     addComment,

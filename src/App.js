@@ -8,6 +8,7 @@ import Show from './components/UI/Pages/Show/Show'
 import GoogleLogin from './components/UI/Form/Login/GoogleLogin'
 import * as actions from './store/actions/index'
 import Public from './components/UI/Pages/Public/Public'
+import About from './components/UI/Pages/Public/About'
 
 class App extends Component {
   componentDidMount() {
@@ -29,6 +30,7 @@ class App extends Component {
         <Switch>
           <Route path='/login' component={GoogleLogin} />
           <Route path='/public' component={Public} />
+          <Route path='/about' component={About} />
         </Switch>
       )
     }

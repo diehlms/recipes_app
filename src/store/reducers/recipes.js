@@ -48,16 +48,6 @@ export default function(state = initialState, action) {
                 ...state
             }
         }
-        case actions.ADD_STAR: {
-            return {
-                ...state
-            }
-        }
-        case actions.REMOVE_STAR: {
-            return {
-                ...state
-            }
-        }
         default: return state
     }
 }

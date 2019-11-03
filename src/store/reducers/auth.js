@@ -4,6 +4,7 @@ import { authRef } from '../../firebase'
 const initialState = {
     user: null,
     loading: false,
+    path: null
 }
 
 const authReducer = (state = initialState, action) => {
@@ -19,7 +20,8 @@ const authReducer = (state = initialState, action) => {
             return [
                 state, {
                     user: action.user,
-                    loading: false
+                    loading: false,
+                    path: action.path
                 }
             ]
         }
@@ -35,6 +37,7 @@ const authReducer = (state = initialState, action) => {
                 state, {
                     user: null,
                     loading: false,
+                    path: action.path
                 }
             ]
         }
@@ -42,6 +45,13 @@ const authReducer = (state = initialState, action) => {
             return [
                 state, {
                     loading: true
+                }
+            ]
+        }
+        case actions.CHECK_AUTH_FAIL: {
+            return [
+                state, {
+                    loading: false
                 }
             ]
         }

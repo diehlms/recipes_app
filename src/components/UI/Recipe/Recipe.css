@@ -5,7 +5,8 @@
     grid-template-columns: 50% 50%;
     padding: 15px;
     box-sizing: border-box;
-    min-height: 180px;
+    height: 50%;
+    overflow: scroll;
 }
 
 .indRecipe {
@@ -27,4 +28,8 @@
 
 .stars>span>button {
     margin: 3px;
+}
+
+.recipeGridImage {
+    max-width: 80%;
 }

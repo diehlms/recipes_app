@@ -7,3 +7,8 @@
 .recipeShow>div{
     padding: 15px;
 }
+
+.recipeShowImage {
+    max-width: 100%;
+    margin: 0 auto;
+}

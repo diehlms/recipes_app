@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import * as actions from '../../../store/actions/index'
-import { throwStatement } from '@babel/types';
 import firebase from '../../../firebase'
 import './Recipe.css'
+import * as fbDemo from 'firebase'
+import 'firebase/firestore'
 
 export class Recipe extends Component {
     render() {
         const { id, name, directions, ingredient, stars, image } = this.props.recipe;
-        
         const ingList = ingredient.map((ing) => {
             return (
                 <li>{ing}</li>
@@ -18,9 +17,9 @@ export class Recipe extends Component {
 
         let img = '';
 
-        if ({image}) {
+        if (`${image}`.length > 0) {
             img = (
-                <img id={`${image}-img`} alt=''/>
+                <img className="recipeGridImage" id={`${image}-img`} alt=''/>
             )
             let storage = firebase.storage();
             let storageRef = storage.refFromURL(`${image}`)
@@ -31,19 +30,14 @@ export class Recipe extends Component {
             
         }
 
-
         const addStar = id => {
-            const increment = firebase.firestore.FieldValue.increment(1)
-            var db = firebase.firestore()
-            var dbRefInd = db.collection('recipes').doc(id)
-            dbRefInd.update({stars: increment})
+            const dbRef = firebase.firestore().collection('recipes').doc(`${id}`)
+            dbRef.update({stars: firebase.firestore.FieldValue.increment(1)})
         }
 
         const removeStar = id => {
-            const decrement = firebase.firestore.FieldValue.increment(-1)
-            var db = firebase.firestore()
-            var dbRefInd = db.collection('recipes').doc(id)
-            dbRefInd.update({stars: decrement})
+            // const dbRef = fbDemo.firestore().collection('recipes').doc(`${id}`)
+            // dbRef.update("stars", fbDemo.firestore.FieldValue.increment(-1))
         }
 
         return (
@@ -59,14 +53,14 @@ export class Recipe extends Component {
                     </span>
                 </div>
                 <div>
-                    {img !== '' ? img : null}
+                    {img}
                 </div>
                 <div className="infoCard1">
                     <div>
                         <p>Ingredients:</p>
                         <ul>{ingList}</ul>
                     </div>
-                    <div className="directions">
+                    <div>
                         <p>Directions:</p>
                         <p>{directions}</p>
                     </div>
@@ -78,10 +72,9 @@ export class Recipe extends Component {
                         color: 'white',
                         padding: '6px',
                         marginBottom: '5px',
-                        bottom: '0',
+                        bottom: '0px',
                         border: 'none',
                         cursor: 'pointer'
-                    
                     }}
                     onClick={this.props.delRecipe.bind(this,id)}>
                     delete recipe
@@ -91,11 +84,5 @@ export class Recipe extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onAddStar: id => dispatch(actions.addStar(id)),
-        onRemoveStar: id => dispatch(actions.removeStar(id))
-    }
-}
 
-export default connect(null, mapDispatchToProps)(Recipe)
+export default connect(null, null)(Recipe)

@@ -1,6 +1,5 @@
 import * as actions from './actionTypes'
-import firebase, { authRef, provider } from '../../firebase'
-import { auth } from 'firebase';
+import { authRef, provider } from '../../firebase'
 
 export const loginInit = () => {
     return {
@@ -45,16 +44,20 @@ export const logoutInit = () => {
 export const logout = () => {
     return dispatch => {
         dispatch(logoutInit())
-        authRef.signout()
+        authRef.signOut()
         .then(() => {
-            dispatch(logoutSuccess())
+            dispatch(logoutSuccess('/'))
+        })
+        .catch(err => {
+            console.log(err)
         })
     }
 }
 
-export const logoutSuccess = () => {
+export const logoutSuccess = path => {
     return {
-        type: actions.LOGIN_SUCCESS
+        type: actions.LOGIN_SUCCESS,
+        path
     }
 }
 
@@ -70,12 +73,21 @@ export const checkAuthSuccess = user => {
         user
     }
 }
+
+export const checkAuthFail = () => {
+    return {
+        type: actions.CHECK_AUTH_FAIL
+    }
+}
+
 export const checkAuthState = () => {
     return dispatch => {
         dispatch(checkAuthLoading())
         authRef.onAuthStateChanged((user) => {
             if (user) {
                 dispatch(checkAuthSuccess(user))
+            } else {
+                dispatch(checkAuthFail())
             }
         });
     }
