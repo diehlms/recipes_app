@@ -13,7 +13,7 @@ class CommentList extends Component {
 
         if (!this.props.loading && this.props.comments[1] && this.props.comments[1].comments) {
             this.props.comments[1].comments.map(indComment => {
-                if (indComment.recipeId == this.props.recipeId) {
+                if (indComment.recipeId === this.props.recipeId) {
                     commentList.push(indComment.comment)
                 }
             })

@@ -35,7 +35,10 @@ export class Form extends Component {
                     case firebase.storage.TaskState.RUNNING:
                         console.log('Upload running')
                         break;
+                    default:
+                        return
                     }
+
                 }, function(error) {
                     console.log(error)
                 }, () => {
@@ -105,7 +108,6 @@ export class Form extends Component {
     }
     
     render() {
-
         return (
             <div>
                 <button 

@@ -1,5 +1,4 @@
 import * as actions from '../actions/actionTypes'
-import { authRef } from '../../firebase'
 
 const initialState = {
     user: null,
