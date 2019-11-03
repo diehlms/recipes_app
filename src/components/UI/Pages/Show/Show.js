@@ -22,7 +22,7 @@ class Show extends Component {
             )
             const ingList = ingredient.map(indIng => {
                 return (
-                    <li>{indIng}</li>
+                    <li key={indIng}>{indIng}</li>
                 )
             })
             if(`${image}`.length > 0) {

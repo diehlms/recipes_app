@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import firebase from '../../../firebase'
 import './Recipe.css'
-import * as fbDemo from 'firebase'
 import 'firebase/firestore'
 
 export class Recipe extends Component {
@@ -11,7 +10,7 @@ export class Recipe extends Component {
         const { id, name, directions, ingredient, stars, image } = this.props.recipe;
         const ingList = ingredient.map((ing) => {
             return (
-                <li>{ing}</li>
+                <li key={ing}>{ing}</li>
             )
         })
 

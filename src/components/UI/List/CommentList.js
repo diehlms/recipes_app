@@ -23,7 +23,7 @@ class CommentList extends Component {
         if (commentList.length > 0) {
             comments = commentList.map(indComment => {
                 return (
-                    <li>{indComment}</li>
+                    <li key={indComment}>{indComment}</li>
                 )
             })
         }
