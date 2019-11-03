@@ -1,7 +1,7 @@
 {
   "name": "trial",
   "version": "0.1.0",
-  "homepage" : "https://safe-ravine-10154.herokuapp.com/",
+  "homepage" : "https://safe-ravine-10154.herokuapp.com",
   "private": true,
   "dependencies": {
     "axios": "^0.19.0",
